@@ -1,0 +1,54 @@
+---
+title: "Google-Search-Analysis"
+author: "18F-0421"
+date: "12/20/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(ggplot2)
+library(scales)
+library(gtrendsR)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+dataSet = gtrends(keyword = "Machine Learning")$interest_by_country
+dataSet = dataSet[-c(3:5)]
+dataSet = na.omit(dataSet)
+head(dataSet,10)
+```
+
+```{r}
+tempDataSet= head(dataSet,10)
+ggplot(tempDataSet, aes(x=reorder(location,-hits), y=hits)) +
+  geom_bar(stat="identity", fill="blue")+ labs(x = "geoName", y = "Machine learning", color = "Legend Title\n")+
+  theme(axis.text.x = element_text(angle = 90))
+
+dataSet = gtrends(keyword = "Machine Learning")$interest_over_time
+dataSet = dataSet[-c(3:7)]
+head(dataSet,10)
+tail(dataSet,1)
+```
+
+```{r}
+tempDataSet=dataSet
+ggplot(tempDataSet, aes(x=date, y=hits)) +
+  geom_line(stat="identity",  color="steelblue")+ 
+  labs(title="Total Google Searches for Machine Learning",  x = "Year",   y = "Total Count",  color = "Legend Title\n")+
+  theme_minimal()
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
